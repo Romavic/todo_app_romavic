@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "551312602581",
+    "project_id": "todo-app-romavic",
+    "storage_bucket": "todo-app-romavic.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:551312602581:android:bd700c536e453a6cae795c",
+        "android_client_info": {
+          "package_name": "com.todoapp.romavic"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHiTmwGgAnz6pmaAsdjpYATmTncV5d2Jo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
