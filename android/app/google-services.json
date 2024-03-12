@@ -12,7 +12,20 @@
           "package_name": "com.todoapp.romavic"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "551312602581-ucs1rur26nhj21h34if2c5fl5pvbgi3j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.todoapp.romavic",
+            "certificate_hash": "cf6b43acbd9920804c21b4e93d29193a93cd3f35"
+          }
+        },
+        {
+          "client_id": "551312602581-n5u1ib9kvrtge6mm03j50b8gjl25h76a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBHiTmwGgAnz6pmaAsdjpYATmTncV5d2Jo"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "551312602581-n5u1ib9kvrtge6mm03j50b8gjl25h76a.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "551312602581-og2sicdamghvl7q34sc7mhut0hdggg56.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "todoapp.romavic.com.todoAppRomavic"
+              }
+            }
+          ]
         }
       }
     }
