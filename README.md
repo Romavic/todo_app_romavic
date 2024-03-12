@@ -1,16 +1,20 @@
-# todo_app_romavic
+# Todo App
 
-TodoApp
+#### For Run project must have:
+-  Flutter version  channel stable - 3.19.3
+-  Dart sdk: '>=3.3.1 <4.0.0'
+-  VS Code or Android Studio the latest version
 
-## Getting Started
+When project is downloaded, must generate
+-  flutter pub run build_runner watch --delete-conflicting-outputs
 
-This project is a starting point for a Flutter application.
+For more details [Mobx](https://mobx.netlify.app/getting-started).
 
-A few resources to get you started if this is your first Flutter project:
+#### Project Architect:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+-  **component** on this path, we have all component for project: Text, Button, etc.
+-  **core** on this path, we have services, database and helpers interface and implementations.
+-  **di** on this path, we have class injected on by DI.
+-  **features** on this path, we have all features of project and on inside, has data, domain and presentation.
+-  **navigation** on this path, we have navigation class to manager routes.
+-  **resources** on this path, we have colors, theme, path of images.
