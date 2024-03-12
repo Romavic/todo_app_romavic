@@ -40,9 +40,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
           ),
-          SizedBox(height: getToAppBar(context) * 2),
+          SizedBox(
+            height: getToAppBar(context) * 2,
+          ),
           Padding(
-            padding: EdgeInsets.all(getToAppBar(context) * 2),
+            padding: EdgeInsets.all(
+              getToAppBar(context) * 1.5,
+            ),
             child: Observer(builder: (context) {
               return ButtonTextWithLoaderComponent(
                 onPressed: () {
@@ -60,7 +64,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               );
             }),
           ),
-          SizedBox(height: getToAppBar(context) * 2),
+          SizedBox(
+            height: getToAppBar(context) * 1.5,
+          ),
         ],
       ),
     );

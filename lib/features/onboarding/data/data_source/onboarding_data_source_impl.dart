@@ -1,6 +1,3 @@
-import 'dart:collection';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:todo_app_romavic/core/services/firebase/auth_firebase_services.dart';
@@ -21,8 +18,8 @@ class OnboardingDataSourceImpl implements OnboardingDataSource {
       getLoginWithGoogle() async {
     try {
       return await authFirebaseServices.getLoginWithGoogle().then(
-        (value) {
-          return Left(value);
+        (userCredential) {
+          return Left(userCredential);
         },
       );
     } on FirebaseAuthException catch (exception) {

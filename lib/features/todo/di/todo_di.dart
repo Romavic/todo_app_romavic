@@ -3,6 +3,9 @@ import 'package:todo_app_romavic/features/todo/presentation/state/todo_store.dar
 
 Future<void> todoDI() async {
   getIt.registerLazySingleton(
-    () => TodoStore(dateHelper: getIt.get()),
+    () => TodoStore(
+      dateHelper: getIt.get(),
+      todoRepository: getIt.get(),
+    ),
   );
 }
