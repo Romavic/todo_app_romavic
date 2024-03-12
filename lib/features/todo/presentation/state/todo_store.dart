@@ -3,6 +3,7 @@ import 'package:mobx/mobx.dart';
 import 'package:todo_app_romavic/core/helpers/date/date_helper.dart';
 import 'package:todo_app_romavic/core/helpers/string_extension.dart';
 import 'package:todo_app_romavic/features/task_create/domain/entity/task_entity.dart';
+import 'package:todo_app_romavic/features/todo/domain/repository/todo_repository.dart';
 import 'package:todo_app_romavic/features/todo/utils/task_extension.dart';
 
 part 'todo_store.g.dart';
@@ -10,9 +11,11 @@ part 'todo_store.g.dart';
 class TodoStore = TodoStoreBase with _$TodoStore;
 
 abstract class TodoStoreBase with Store {
+  final TodoRepository todoRepository;
   final DateHelper dateHelper;
 
   TodoStoreBase({
+    required this.todoRepository,
     required this.dateHelper,
   });
 
@@ -32,8 +35,6 @@ abstract class TodoStoreBase with Store {
 
   @action
   Future<void> addTasks(List<TaskEntity> tasks) async {
-    debugPrint(currentDate.toString());
-
     tasksObservable.clear();
     tasksObservable = ObservableList.of(tasks);
   }
@@ -50,22 +51,7 @@ abstract class TodoStoreBase with Store {
     return dateFormatted.toUpperCaseFirstLetter();
   }
 
-  int? getStreaksDay(List<TaskEntity>? taskEntity) {
-    if (taskEntity?.getStreaksDay() == null ||
-        taskEntity?.getStreaksDay() == 0) {
-      return 100;
-    } else {
-      return taskEntity?.getStreaksDay();
-    }
-  }
-
-  int? getStreaksDayCompleted(List<TaskEntity>? taskEntity) {
-    /*   int streaksDayCompleted = 100 / taskEntity?.getStreaksDayCompleted().toDouble();
-    if (taskEntity?.getStreaksDayCompleted() == null ||
-        taskEntity?.getStreaksDayCompleted() == 0) {
-      return 0;
-    } else {
-      return taskEntity?.getStreaksDay();
-    }*/
+  int streaksDay(List<TaskEntity>? tasks) {
+    return todoRepository.getStreaksDay(tasks);
   }
 }

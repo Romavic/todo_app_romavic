@@ -2,57 +2,64 @@ import 'package:todo_app_romavic/features/task_create/domain/entity/task_entity.
 
 extension TaskExtension on Iterable<TaskEntity> {
   int getStreaksDay() {
-    List<StreakTaskEntity> streaks = [];
+    final currentDate = DateTime.now();
 
-    for (var element in this) {
-      element.streaks?.where(
-        (element) {
-          bool isSameYear = element.dateTime?.year == DateTime.now().year;
-          bool isSameMonth = element.dateTime?.month == DateTime.now().month;
-          bool isSameDay = element.dateTime?.day == DateTime.now().day;
-
-          return isSameYear && isSameMonth && isSameDay;
-        },
-      ).forEach(
-        (streak) {
-          streaks.add(streak);
-        },
-      );
-    }
-
-    return streaks.length;
+    return where((task) {
+      return task.streaks?.any((streak) =>
+              streak.dateTime?.year == currentDate.year &&
+              streak.dateTime?.month == currentDate.month &&
+              streak.dateTime?.day == currentDate.day) ??
+          false;
+    }).length;
   }
 
   int getStreaksDayCompleted() {
-    List<StreakTaskEntity> streaks = [];
+    final currentDate = DateTime.now();
 
-    for (var element in this) {
-      element.streaks?.where(
-        (element) {
-          bool isSameYear = element.dateTime?.year == DateTime.now().year;
-          bool isSameMonth = element.dateTime?.month == DateTime.now().month;
-          bool isSameDay = element.dateTime?.day == DateTime.now().day;
-          bool isDone = element.isDone == true;
-          return isSameYear && isSameMonth && isSameDay && isDone;
-        },
-      ).forEach(
-        (streak) {
-          streaks.add(streak);
-        },
-      );
-    }
-
-    return streaks.length;
+    return where((task) {
+      return task.streaks?.any((streak) =>
+              streak.dateTime?.year == currentDate.year &&
+              streak.dateTime?.month == currentDate.month &&
+              streak.dateTime?.day == currentDate.day &&
+              streak.isDone == true) ??
+          false;
+    }).length;
   }
 
   List<TaskEntity> filterByDay(DateTime dateTime) {
-    return where(
-      (element) {
-        return element.streaks?.any(
-              (element) => element.dateTime == dateTime,
-            ) ??
-            false;
-      },
-    ).toList();
+    return where((task) =>
+            task.streaks?.any((streak) => streak.dateTime == dateTime) ?? false)
+        .toList();
+  }
+
+  int filterStreaksInRange(
+    DateTime initDate,
+    DateTime endDate,
+  ) {
+    return where((task) {
+      return task.streaks?.any((streak) {
+            final streakDate = streak.dateTime;
+            return streakDate != null &&
+                streakDate.isAfter(initDate) &&
+                streakDate.isBefore(endDate);
+          }) ??
+          false;
+    }).length;
+  }
+
+  int filterIncompleteStreaksInRange(
+    DateTime initDate,
+    DateTime endDate,
+  ) {
+    return where((task) {
+      return task.streaks?.any((streak) {
+            final streakDate = streak.dateTime;
+            return streakDate != null &&
+                streakDate.isAfter(initDate) &&
+                streakDate.isBefore(endDate) &&
+                streak.isDone == false;
+          }) ??
+          false;
+    }).length;
   }
 }
