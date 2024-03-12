@@ -25,6 +25,22 @@ mixin _$TodoStore on TodoStoreBase, Store {
     });
   }
 
+  late final _$tasksObservableAtom =
+      Atom(name: 'TodoStoreBase.tasksObservable', context: context);
+
+  @override
+  ObservableList<TaskEntity> get tasksObservable {
+    _$tasksObservableAtom.reportRead();
+    return super.tasksObservable;
+  }
+
+  @override
+  set tasksObservable(ObservableList<TaskEntity> value) {
+    _$tasksObservableAtom.reportWrite(value, super.tasksObservable, () {
+      super.tasksObservable = value;
+    });
+  }
+
   late final _$changeCurrentMonthAndYearByCalendarAsyncAction = AsyncAction(
       'TodoStoreBase.changeCurrentMonthAndYearByCalendar',
       context: context);
@@ -35,19 +51,19 @@ mixin _$TodoStore on TodoStoreBase, Store {
         .run(() => super.changeCurrentMonthAndYearByCalendar(newData));
   }
 
-  late final _$scheduleAlarmAsyncAction =
-      AsyncAction('TodoStoreBase.scheduleAlarm', context: context);
+  late final _$addTasksAsyncAction =
+      AsyncAction('TodoStoreBase.addTasks', context: context);
 
   @override
-  Future<void> scheduleAlarm(String title, String details, DateTime dateTime) {
-    return _$scheduleAlarmAsyncAction
-        .run(() => super.scheduleAlarm(title, details, dateTime));
+  Future<void> addTasks(List<TaskEntity> tasks) {
+    return _$addTasksAsyncAction.run(() => super.addTasks(tasks));
   }
 
   @override
   String toString() {
     return '''
-currentDate: ${currentDate}
+currentDate: ${currentDate},
+tasksObservable: ${tasksObservable}
     ''';
   }
 }

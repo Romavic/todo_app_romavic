@@ -44,4 +44,15 @@ extension TaskExtension on Iterable<TaskEntity> {
 
     return streaks.length;
   }
+
+  List<TaskEntity> filterByDay(DateTime dateTime) {
+    return where(
+      (element) {
+        return element.streaks?.any(
+              (element) => element.dateTime == dateTime,
+            ) ??
+            false;
+      },
+    ).toList();
+  }
 }

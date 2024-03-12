@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:todo_app_romavic/core/helpers/date/date_helper.dart';
 import 'package:todo_app_romavic/core/helpers/string_extension.dart';
-import 'package:alarm/alarm.dart';
 import 'package:todo_app_romavic/features/task_create/domain/entity/task_entity.dart';
 import 'package:todo_app_romavic/features/todo/utils/task_extension.dart';
 
@@ -20,9 +19,23 @@ abstract class TodoStoreBase with Store {
   @observable
   DateTime? currentDate = DateTime.now();
 
+  @observable
+  ObservableList<TaskEntity> tasksObservable = ObservableList.of([]);
+
   @action
   Future<void> changeCurrentMonthAndYearByCalendar(DateTime newData) async {
     currentDate = newData;
+    tasksObservable = ObservableList.of(
+      tasksObservable.filterByDay(currentDate ?? DateTime.now()),
+    );
+  }
+
+  @action
+  Future<void> addTasks(List<TaskEntity> tasks) async {
+    debugPrint(currentDate.toString());
+
+    tasksObservable.clear();
+    tasksObservable = ObservableList.of(tasks);
   }
 
   String? localeOfCalendar(BuildContext context) {
@@ -37,29 +50,6 @@ abstract class TodoStoreBase with Store {
     return dateFormatted.toUpperCaseFirstLetter();
   }
 
-  @action
-  Future<void> scheduleAlarm(
-    String title,
-    String details,
-    DateTime dateTime,
-  ) async {
-    final alarmSettings = AlarmSettings(
-      id: 42,
-      dateTime: dateTime,
-      assetAudioPath: 'assets/alarm.mp3',
-      loopAudio: true,
-      vibrate: true,
-      volume: 0.8,
-      fadeDuration: 3.0,
-      notificationTitle: 'This is the title',
-      notificationBody: 'This is the body',
-      androidFullScreenIntent: true,
-      enableNotificationOnKill: true,
-    );
-
-    await Alarm.set(alarmSettings: alarmSettings);
-  }
-
   int? getStreaksDay(List<TaskEntity>? taskEntity) {
     if (taskEntity?.getStreaksDay() == null ||
         taskEntity?.getStreaksDay() == 0) {
@@ -69,10 +59,8 @@ abstract class TodoStoreBase with Store {
     }
   }
 
-
-
   int? getStreaksDayCompleted(List<TaskEntity>? taskEntity) {
- /*   int streaksDayCompleted = 100 / taskEntity?.getStreaksDayCompleted().toDouble();
+    /*   int streaksDayCompleted = 100 / taskEntity?.getStreaksDayCompleted().toDouble();
     if (taskEntity?.getStreaksDayCompleted() == null ||
         taskEntity?.getStreaksDayCompleted() == 0) {
       return 0;

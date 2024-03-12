@@ -21,28 +21,18 @@ abstract class OnboardingBase with Store {
   }
 
   @action
-  Future<void> login(
-    String name, {
+  Future<void> login({
     required Function() onSuccess,
     required Function(String message) onError,
   }) async {
     changeStateButton(true);
-
-    onboardingRepository.accountUserRegister(name: name).then(
-      (value) {
-        return value.fold(
-          (l) {
-            return onSuccess();
-          },
-          (r) {
-            return onError(r);
-          },
-        );
-      },
-    ).whenComplete(
-      () {
-        changeStateButton(false);
-      },
+    await onboardingRepository.loginGoogleAccount().then((value) {
+      return value.fold(
+        (success) => onSuccess(),
+        (error) => onError(error),
+      );
+    }).whenComplete(
+      () => changeStateButton(false),
     );
   }
 }

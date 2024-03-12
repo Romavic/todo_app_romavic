@@ -93,7 +93,7 @@ class _TodoScreenState extends State<TodoScreen> {
                 },
               ),
             ),
-            Padding(
+            /*  Padding(
               padding: const EdgeInsets.only(
                 top: 10.0,
                 bottom: 10.0,
@@ -116,51 +116,57 @@ class _TodoScreenState extends State<TodoScreen> {
                   );
                 },
               ),
-            ),
+            ),*/
             Expanded(
               child: ValueListenableBuilder<Box<TaskEntity>>(
                 valueListenable: taskListenable,
                 builder: (context, box, _) {
-                  List<TaskEntity> tasks = box.values.toList();
+                  store.addTasks(box.values.toList());
 
-                  if (tasks.isEmpty) {
-                    return InformationComponent(
-                      imageSvg: addNotesIllustrations,
-                      text: "without notes",
-                    );
-                  } else {
-                    return ListView.separated(
-                      shrinkWrap: true,
-                      physics: const ScrollPhysics(),
-                      itemCount: tasks.length,
-                      itemBuilder: (context, index) {
-                        TaskEntity taskEntity = tasks[index];
-                        return TaskTitleWithSubtitleComponent(
-                          title: taskEntity.title.toString(),
-                          details: taskEntity.details.toString(),
-                          isDone: taskEntity.isTaskComplete ?? false,
-                          onChanged: (bool? value) {},
-                          onTap: () {
-                            context.push(
-                              taskDetailsRoute,
-                              extra: TaskDetailsExtras(taskKey: taskEntity.key),
+                  return Observer(
+                    builder: (_) {
+                      if (store.tasksObservable.isEmpty) {
+                        return InformationComponent(
+                          imageSvg: addNotesIllustrations,
+                          text: "without notes",
+                        );
+                      } else {
+                        return ListView.separated(
+                          shrinkWrap: true,
+                          physics: const ScrollPhysics(),
+                          itemCount: store.tasksObservable.length,
+                          itemBuilder: (context, index) {
+                            var taskEntity = store.tasksObservable[index];
+                            return TaskTitleWithSubtitleComponent(
+                              title: taskEntity.title.toString(),
+                              details: taskEntity.details.toString(),
+                              isDone: taskEntity.isTaskComplete ?? false,
+                              onChanged: (bool? value) {},
+                              onTap: () {
+                                context.push(
+                                  taskDetailsRoute,
+                                  extra: TaskDetailsExtras(
+                                    taskKey: taskEntity.key,
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          separatorBuilder: (BuildContext context, int index) {
+                            return const Padding(
+                              padding: EdgeInsets.only(
+                                top: 0.0,
+                                left: 15.0,
+                                bottom: 0.0,
+                                right: 15.0,
+                              ),
+                              child: Divider(color: Colors.black12),
                             );
                           },
                         );
-                      },
-                      separatorBuilder: (BuildContext context, int index) {
-                        return const Padding(
-                          padding: EdgeInsets.only(
-                            top: 0.0,
-                            left: 15.0,
-                            bottom: 0.0,
-                            right: 15.0,
-                          ),
-                          child: Divider(color: Colors.black12),
-                        );
-                      },
-                    );
-                  }
+                      }
+                    },
+                  );
                 },
               ),
             ),

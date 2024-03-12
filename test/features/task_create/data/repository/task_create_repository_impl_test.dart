@@ -20,7 +20,7 @@ void main() {
   late TaskCreateRepositoryImpl repository;
   late MockTaskCreateDataSource mockDataSource;
   late MockOnboardingBox mockOnboardingBox;
-  late MockTaskCreateBox mockTaskCreateBox;
+  late Box<TaskEntity> taskCreatedBox;
 
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
@@ -31,7 +31,7 @@ void main() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(
       channel,
-      (MethodCall methodCall) async {
+          (MethodCall methodCall) async {
         return ".";
       },
     );
@@ -42,12 +42,12 @@ void main() {
 
     mockDataSource = MockTaskCreateDataSource();
     mockOnboardingBox = MockOnboardingBox();
-    mockTaskCreateBox = MockTaskCreateBox();
+    taskCreatedBox = Hive.box<TaskEntity>("task_table");
 
     repository = TaskCreateRepositoryImpl(
       taskCreateDataSource: mockDataSource,
       onboardingBox: mockOnboardingBox,
-      taskCreateBox: mockTaskCreateBox,
+      taskCreateBox: taskCreatedBox,
     );
   });
 
@@ -74,33 +74,28 @@ void main() {
       preferredWeekdays: preferredWeekdays,
     );
 
-    // Assert
-    verify(() => mockTaskCreateBox.add(captureAny())).called(1);
-
     // Additional assertion to verify the specific parameters
-    final capturedArgument =
-        verify(() => mockTaskCreateBox.add(captureAny())).captured.first;
-    expect(capturedArgument.idUser, "1");
-    expect(capturedArgument.title, 'Test Task');
-    // Add similar assertions for other properties
+    final task = taskCreatedBox.getAt(taskCreatedBox.length-1);
+    expect(task!.idUser, "1");
+    expect(task.title, 'Test Task');
   });
 
   test(
       'findMeetingDays should return an empty list when startDate is after endDate',
-      () {
-    // Arrange
-    final startDate = DateTime.now();
-    final endDate = startDate
-        .subtract(const Duration(days: 1)); // startDate is after endDate
-    final preferredWeekdays = [startDate.weekday];
+          () {
+        // Arrange
+        final startDate = DateTime.now();
+        final endDate = startDate
+            .subtract(const Duration(days: 1)); // startDate is after endDate
+        final preferredWeekdays = [startDate.weekday];
 
-    // Act
-    final result =
+        // Act
+        final result =
         repository.findMeetingDays(startDate, endDate, preferredWeekdays);
 
-    // Assert
-    expect(result, isEmpty);
-  });
+        // Assert
+        expect(result, isEmpty);
+      });
 
   test('findMeetingDays should return meeting days within the date range', () {
     // Arrange
@@ -110,7 +105,7 @@ void main() {
 
     // Act
     final result =
-        repository.findMeetingDays(startDate, endDate, preferredWeekdays);
+    repository.findMeetingDays(startDate, endDate, preferredWeekdays);
 
     // Assert
     expect(

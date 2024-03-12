@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:todo_app_romavic/core/services/firebase/firebase_firestore_services.dart';
+import 'package:todo_app_romavic/core/services/firebase/firestore_firebase_services.dart';
 
-class FirebaseFirestoreServicesImpl implements FirebaseFirestoreServices {
+class FirestoreFirebaseServicesImpl implements FirestoreFirebaseServices {
   final FirebaseFirestore firebaseFirestore;
 
-  FirebaseFirestoreServicesImpl({
+  FirestoreFirebaseServicesImpl({
     required this.firebaseFirestore,
   });
 

@@ -14,20 +14,22 @@ class OnboardingRepositoryImpl implements OnboardingRepository {
   });
 
   @override
-  Future<Either<String, String>> accountUserRegister({
-    required String name,
-  }) async {
-    return await onboardingDataSource.postAccountUserRegister(bodyRequest: {
-      "name": name,
-    }).then(
+  Future<Either<String, String>> loginGoogleAccount() async {
+    return await onboardingDataSource.getLoginWithGoogle().then(
       (value) {
         return value.fold(
-          (l) {
-            onboardingBox.add(OnboardingEntity(userId: l));
-            return Left(l);
+          (userCredential) {
+            onboardingDataSource.postUserOnCollection(bodyRequest: {
+              "email": userCredential.user?.email,
+              "name": userCredential.user?.displayName,
+            });
+            onboardingBox.add(
+              OnboardingEntity(userId: userCredential.user?.uid),
+            );
+            return const Left("Success login account");
           },
-          (r) {
-            return Right(r.message.toString());
+          (firebaseAuthException) {
+            return const Right("Error login account");
           },
         );
       },

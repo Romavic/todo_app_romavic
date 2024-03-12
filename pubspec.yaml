@@ -12,6 +12,7 @@ dependencies:
   uuid: ^4.3.3
   cupertino_icons: ^1.0.6
   firebase_core: ^2.27.0
+  firebase_auth: ^4.17.8
   cloud_firestore: ^4.15.8
   get_it: ^7.6.7
   adaptive_theme: ^3.6.0
@@ -32,6 +33,7 @@ dependencies:
   notification_permissions: ^0.6.1
   step_progress_indicator: ^1.0.2
   mocktail: ^1.0.3
+  google_sign_in: ^6.2.1
 
 dev_dependencies:
   flutter_test:

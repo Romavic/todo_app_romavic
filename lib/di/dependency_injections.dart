@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:todo_app_romavic/core/database/hive/boxes_di.dart';
 import 'package:todo_app_romavic/core/helpers/date/date_helper.dart';
 import 'package:todo_app_romavic/core/helpers/date/date_helper_impl.dart';
-import 'package:todo_app_romavic/core/services/firebase/firebase_firestore_services.dart';
-import 'package:todo_app_romavic/core/services/firebase/firebase_firestore_services_impl.dart';
+import 'package:todo_app_romavic/core/services/firebase/auth_firebase_services.dart';
+import 'package:todo_app_romavic/core/services/firebase/auth_firebase_services_impl.dart';
+import 'package:todo_app_romavic/core/services/firebase/firestore_firebase_services.dart';
+import 'package:todo_app_romavic/core/services/firebase/firestore_firebase_services_impl.dart';
 import 'package:todo_app_romavic/features/onboarding/di/onboarding_di.dart';
 import 'package:todo_app_romavic/features/task_create/di/task_create_di.dart';
 import 'package:todo_app_romavic/features/task_details/di/task_details_di.dart';
@@ -19,8 +22,18 @@ Future<void> dependenciesInjections() async {
     FirebaseFirestore.instance,
   );
 
-  getIt.registerSingleton<FirebaseFirestoreServices>(
-    FirebaseFirestoreServicesImpl(
+  getIt.registerSingleton(
+    FirebaseAuth.instance,
+  );
+
+  getIt.registerSingleton<AuthFirebaseServices>(
+    AuthFirebaseServicesImpl(
+      firebaseAuth: getIt.get(),
+    ),
+  );
+
+  getIt.registerSingleton<FirestoreFirebaseServices>(
+    FirestoreFirebaseServicesImpl(
       firebaseFirestore: getIt.get(),
     ),
   );

@@ -29,11 +29,11 @@ mixin _$OnboardingStore on OnboardingBase, Store {
       AsyncAction('OnboardingBase.login', context: context);
 
   @override
-  Future<void> login(String name,
+  Future<void> login(
       {required dynamic Function() onSuccess,
       required dynamic Function(String) onError}) {
     return _$loginAsyncAction
-        .run(() => super.login(name, onSuccess: onSuccess, onError: onError));
+        .run(() => super.login(onSuccess: onSuccess, onError: onError));
   }
 
   late final _$OnboardingBaseActionController =

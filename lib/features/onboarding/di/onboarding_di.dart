@@ -7,7 +7,10 @@ import 'package:todo_app_romavic/features/onboarding/presentation/state_manageme
 
 Future<void> onboardingDI() async {
   getIt.registerFactory<OnboardingDataSource>(
-    () => OnboardingDataSourceImpl(firebaseFirestoreServices: getIt.get()),
+    () => OnboardingDataSourceImpl(
+      firebaseFirestoreServices: getIt.get(),
+      authFirebaseServices: getIt.get(),
+    ),
   );
 
   getIt.registerFactory<OnboardingRepository>(

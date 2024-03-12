@@ -23,6 +23,14 @@ if (flutterVersionName == null) {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('../keystore/TodoAppKeyStore.jks')
+            storePassword 'TodoAppKeyStore'
+            keyPassword 'TodoAppKeyStore'
+            keyAlias 'TodoAppAlias'
+        }
+    }
     namespace "com.todoapp.romavic"
     compileSdk flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
