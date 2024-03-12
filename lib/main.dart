@@ -1,6 +1,4 @@
-import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:alarm/alarm.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,7 +9,6 @@ import 'package:todo_app_romavic/di/dependency_injections.dart';
 import 'package:todo_app_romavic/firebase_options.dart';
 import 'package:todo_app_romavic/navigation/go_router_navigation.dart';
 import 'package:todo_app_romavic/resources/colors.dart';
-import 'package:todo_app_romavic/resources/theme/dark/dark_theme.dart';
 import 'package:todo_app_romavic/resources/theme/light/light_theme.dart';
 
 void main() async {
@@ -21,7 +18,6 @@ void main() async {
   );
   await Alarm.init();
   await Hive.initFlutter();
-  await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -29,41 +25,20 @@ void main() async {
   await openBoxes();
   await dependenciesInjections();
 
-  final savedThemeMode = await AdaptiveTheme.getThemeMode();
-
-  runApp(
-    EasyLocalization(
-      supportedLocales: const [
-        Locale('pt', 'PT'),
-        Locale('en', 'US'),
-      ],
-      path: 'assets/translations',
-      fallbackLocale: const Locale('en', 'US'),
-      child: App(savedThemeMode: savedThemeMode),
-    ),
-  );
+  runApp(const App());
 }
 
 class App extends StatelessWidget {
-  const App({super.key, this.savedThemeMode});
-
-  final AdaptiveThemeMode? savedThemeMode;
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveTheme(
-      light: lightTheme,
-      dark: darkTheme,
-      initial: AdaptiveThemeMode.system,
-      builder: (theme, darkTheme) {
-        return MaterialApp.router(
-          routerConfig: goRouterNavigation,
-          title: 'TodoApp - Romavic',
-          debugShowCheckedModeBanner: false,
-          darkTheme: darkTheme,
-          theme: theme,
-        );
-      },
+    return MaterialApp.router(
+      routerConfig: goRouterNavigation,
+      title: 'TodoApp - Romavic',
+      debugShowCheckedModeBanner: false,
+      darkTheme: lightTheme,
+      theme: lightTheme,
     );
   }
 }

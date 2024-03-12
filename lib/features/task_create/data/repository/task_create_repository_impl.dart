@@ -1,3 +1,4 @@
+import 'package:alarm/alarm.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todo_app_romavic/features/onboarding/domain/entity/onboarding_entity.dart';
 import 'package:todo_app_romavic/features/task_create/data/data_source/task_create_data_source.dart';
@@ -39,8 +40,12 @@ class TaskCreateRepositoryImpl implements TaskCreateRepository {
         StreakTaskEntity(
           dateTime: DateTime(year, month, day, hour, minute, second),
           isDone: false,
+          alarmIdentifier:
+              '${title}_${initDate.millisecondsSinceEpoch}'.hashCode,
         ),
       );
+
+      setAlarm(title, details, streaks);
     } else {
       findMeetingDays(initDate, endDate, preferredWeekdays).forEach(
         (element) {
@@ -54,10 +59,14 @@ class TaskCreateRepositoryImpl implements TaskCreateRepository {
             StreakTaskEntity(
               dateTime: DateTime(year, month, day, hour, minute, second),
               isDone: false,
+              alarmIdentifier:
+                  '${title}_${element.millisecondsSinceEpoch}'.hashCode,
             ),
           );
         },
       );
+
+      setAlarm(title, details, streaks);
     }
 
     taskCreateBox.add(
@@ -93,5 +102,30 @@ class TaskCreateRepositoryImpl implements TaskCreateRepository {
       }
     }
     return meetingDays;
+  }
+
+  Future<void> setAlarm(
+    String title,
+    String description,
+    List<StreakTaskEntity> streaks,
+  ) async {
+    streaks.forEach(
+      (element) async {
+        await Alarm.set(
+          alarmSettings: AlarmSettings(
+            id: element.alarmIdentifier ?? 0,
+            dateTime: element.dateTime ?? DateTime.now(),
+            assetAudioPath: 'assets/music/mozart.mp3',
+            loopAudio: false,
+            vibrate: true,
+            volume: 1.0,
+            fadeDuration: 3.0,
+            notificationTitle: title,
+            notificationBody: description,
+            enableNotificationOnKill: false,
+          ),
+        );
+      },
+    );
   }
 }

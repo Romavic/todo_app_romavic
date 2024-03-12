@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:todo_app_romavic/resources/colors.dart';
 import 'package:todo_app_romavic/resources/theme/light/styles/appbar_theme_light.dart';
+import 'package:todo_app_romavic/resources/theme/light/styles/date_picker_theme_light.dart';
 import 'package:todo_app_romavic/resources/theme/light/styles/floating_action_button_theme_light.dart';
 import 'package:todo_app_romavic/resources/theme/light/styles/icon_theme_light.dart';
 import 'package:todo_app_romavic/resources/theme/light/styles/input_decoration_theme_light.dart';
@@ -36,8 +38,11 @@ ThemeData lightTheme = ThemeData.dark(
   inputDecorationTheme: inputDecorationThemeLight,
   floatingActionButtonTheme: floatingActionButtonThemeLight,
   listTileTheme: listTileThemeLight,
-  checkboxTheme: CheckboxThemeData(checkColor: MaterialStatePropertyAll(primaryColor)),
+  checkboxTheme: CheckboxThemeData(
+    checkColor: MaterialStatePropertyAll(primaryColor),
+  ),
   popupMenuTheme: PopupMenuThemeData(
     color: Colors.grey.shade200,
   ),
+  datePickerTheme: datePickerThemeData,
 );

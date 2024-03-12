@@ -1,3 +1,4 @@
+import 'package:alarm/alarm.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todo_app_romavic/features/task_create/domain/entity/task_entity.dart';
 import 'package:todo_app_romavic/features/task_details/domain/repository/task_details_repository.dart';
@@ -34,12 +35,22 @@ class TaskDetailsRepositoryImpl implements TaskDetailsRepository {
         );
 
         updatedTask.streaks![index] = StreakTaskEntity(
-          dateTime: DateTime.now(),
+          dateTime: updatedTask.streaks![index].dateTime,
           isDone: state,
         );
 
-        taskCreateBox.put(key, updatedTask);
+        taskCreateBox.put(key, updatedTask).whenComplete(
+          () {
+            stopAlarm(updatedTask.streaks![index]);
+          },
+        );
       }
     }
+  }
+
+  Future<void> stopAlarm(
+    StreakTaskEntity streak,
+  ) async {
+    await Alarm.stop(streak.alarmIdentifier ?? 0);
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:notification_permissions/notification_permissions.dart';
+import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:todo_app_romavic/components/calendar/agenda_component.dart';
 import 'package:todo_app_romavic/components/cards/task_title_with_subtitle_component.dart';
 import 'package:todo_app_romavic/components/dialogs/adaptive_dialog_component.dart';
@@ -15,10 +16,8 @@ import 'package:todo_app_romavic/features/task_create/domain/entity/frequency_en
 import 'package:todo_app_romavic/features/task_create/domain/entity/task_entity.dart';
 import 'package:todo_app_romavic/features/task_details/domain/extras/task_details_extras.dart';
 import 'package:todo_app_romavic/features/todo/presentation/state/todo_store.dart';
-import 'package:todo_app_romavic/features/todo/utils/task_extension.dart';
 import 'package:todo_app_romavic/navigation/names_navigation.dart';
 import 'package:todo_app_romavic/resources/illustrations.dart';
-import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 class TodoScreen extends StatefulWidget {
   const TodoScreen({super.key});
@@ -65,21 +64,26 @@ class _TodoScreenState extends State<TodoScreen> {
                   firstDay: DateTime(1975),
                   lastDay: DateTime(DateTime.now().year + 5, 12, 31),
                   onPageChanged: (DateTime focusedDay) {
-                    store.changeCurrentMonthAndYearByCalendar(focusedDay);
+                    store.changeCurrentMonthAndYearByCalendar(
+                      focusedDay,
+                      taskListenable.value.values.toList(),
+                    );
                   },
                   onDaySelected: (
                     DateTime selectedDay,
                     DateTime focusedDay,
                   ) {
-                    store.changeCurrentMonthAndYearByCalendar(selectedDay);
+                    store.changeCurrentMonthAndYearByCalendar(
+                      focusedDay,
+                      taskListenable.value.values.toList(),
+                    );
                   },
                 );
               },
             ),
-            const SizedBox(height: 14),
             Padding(
               padding: const EdgeInsets.only(
-                top: 0.0,
+                top: 20.0,
                 bottom: 10.0,
                 left: 14,
                 right: 14,
@@ -93,7 +97,7 @@ class _TodoScreenState extends State<TodoScreen> {
                 },
               ),
             ),
-            /*  Padding(
+            Padding(
               padding: const EdgeInsets.only(
                 top: 10.0,
                 bottom: 10.0,
@@ -105,18 +109,28 @@ class _TodoScreenState extends State<TodoScreen> {
                 builder: (context, box, _) {
                   List<TaskEntity> taskEntity = box.values.toList();
 
-                  return StepProgressIndicator(
-                    totalSteps: taskEntity.getStreaksDay(),
-                    currentStep: taskEntity.getStreaksDayCompleted(),
-                    size: 10,
-                    padding: 0,
-                    selectedColor: const Color(0xff002E82),
-                    unselectedColor: Colors.black12,
-                    roundedEdges: Radius.zero,
+                  return Observer(
+                    builder: (_) {
+                      return StepProgressIndicator(
+                        totalSteps: store.streaksDay(
+                          taskEntity,
+                          store.currentDate ?? DateTime.now(),
+                        ),
+                        currentStep: store.streaksDayCompleted(
+                          taskEntity,
+                          store.currentDate ?? DateTime.now(),
+                        ),
+                        size: 10,
+                        padding: 0,
+                        selectedColor: const Color(0xff002E82),
+                        unselectedColor: Colors.black12,
+                        roundedEdges: Radius.zero,
+                      );
+                    },
                   );
                 },
               ),
-            ),*/
+            ),
             Expanded(
               child: ValueListenableBuilder<Box<TaskEntity>>(
                 valueListenable: taskListenable,
@@ -141,7 +155,6 @@ class _TodoScreenState extends State<TodoScreen> {
                               title: taskEntity.title.toString(),
                               details: taskEntity.details.toString(),
                               isDone: taskEntity.isTaskComplete ?? false,
-                              onChanged: (bool? value) {},
                               onTap: () {
                                 context.push(
                                   taskDetailsRoute,
@@ -182,10 +195,12 @@ class _TodoScreenState extends State<TodoScreen> {
       title: 'What task frequency do you prefer ?',
       agreeLabel: "Daily",
       onAgreePressed: () {
+        context.pop();
         showDatePicker(
           context: context,
-          firstDate: DateTime.now(),
+          firstDate: DateTime(1975),
           lastDate: DateTime(DateTime.now().year + 10),
+          initialDatePickerMode: DatePickerMode.day,
         ).then(
           (value) {
             context.push(
@@ -201,6 +216,7 @@ class _TodoScreenState extends State<TodoScreen> {
       },
       cancelLabel: "Weekly",
       onCancelPressed: () {
+        context.pop();
         showDateRangePicker(
           context: context,
           firstDate: DateTime.now(),

@@ -130,6 +130,7 @@ class _TaskUpdateScreenState extends State<TaskUpdateScreen> {
                           return WeekdaySelector(
                             onChanged: (int day) {
                               store.toggleDay(day);
+                              printIntAsDay(day);
                             },
                             values: List<bool?>.from(store.preferredWeekdays),
                           );
@@ -167,6 +168,12 @@ class _TaskUpdateScreenState extends State<TaskUpdateScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  printIntAsDay(int day) {
+    print(
+      'Received integer: $day.',
     );
   }
 }

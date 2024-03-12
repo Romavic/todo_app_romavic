@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:todo_app_romavic/components/calendar/decoration/circle_decoration_component.dart';
 import 'package:todo_app_romavic/core/database/hive/listenable_boxes.dart';
 import 'package:todo_app_romavic/core/helpers/string_extension.dart';
 import 'package:todo_app_romavic/features/task_create/domain/entity/task_entity.dart';
@@ -68,13 +69,19 @@ class AgendaComponent extends StatelessWidget {
             return isSameDay(focusedDay, day);
           },
           calendarStyle: CalendarStyle(
-            markersAutoAligned: true,
+            markersAutoAligned: false,
             markerMargin: EdgeInsets.zero,
-            markersAlignment: Alignment.bottomCenter,
+            markersAlignment: Alignment.center,
+            markerDecoration: CircleDecoration(
+              topColor: primaryColor,
+              bottomColor: primaryColor,
+              leftColor: primaryColor,
+              rightColor: primaryColor,
+            ),
             markerSize: 4,
             markersMaxCount: 1,
             selectedDecoration: const BoxDecoration(
-              color: Colors.black,
+              color: Colors.blue,
               shape: BoxShape.circle,
             ),
             selectedTextStyle: Theme.of(context).textTheme.titleSmall!,
@@ -121,6 +128,24 @@ class AgendaComponent extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: calendarColor,
                   shape: BoxShape.circle,
+                ),
+                child: Text(
+                  date.day.toString(),
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              );
+            },
+            singleMarkerBuilder: (context, date, events) {
+              return Container(
+                height: 25,
+                width: 25,
+                margin: EdgeInsets.zero,
+                alignment: Alignment.center,
+                decoration: CircleDecoration(
+                  topColor: primaryColor,
+                  bottomColor: primaryColor,
+                  leftColor: primaryColor,
+                  rightColor: primaryColor,
                 ),
                 child: Text(
                   date.day.toString(),

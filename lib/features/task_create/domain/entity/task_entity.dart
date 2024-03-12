@@ -41,9 +41,12 @@ class StreakTaskEntity extends HiveObject {
   DateTime? dateTime;
   @HiveField(2)
   bool? isDone;
+  @HiveField(3)
+  int? alarmIdentifier;
 
   StreakTaskEntity({
     this.dateTime,
     this.isDone,
+    this.alarmIdentifier,
   });
 }

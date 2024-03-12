@@ -3,10 +3,12 @@ import 'package:todo_app_romavic/features/task_create/domain/entity/task_entity.
 abstract class TodoRepository {
   int getStreaksDay(
     List<TaskEntity>? tasks,
+    DateTime dateTime,
   );
 
   int getStreaksDayCompleted(
     List<TaskEntity>? tasks,
+    DateTime dateTime,
   );
 
   int getStreaksWeek(

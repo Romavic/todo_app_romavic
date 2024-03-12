@@ -47,22 +47,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             padding: EdgeInsets.all(
               getToAppBar(context) * 1.5,
             ),
-            child: Observer(builder: (context) {
-              return ButtonTextWithLoaderComponent(
-                onPressed: () {
-                  store.login(
-                    onSuccess: () {
-                      context.push(todoRoute);
-                    },
-                    onError: (error) {
-                      debugPrint(error);
-                    },
-                  );
-                },
-                state: store.stateButton,
-                message: "Enter with Google",
-              );
-            }),
+            child: Observer(
+              builder: (_) {
+                return ButtonTextWithLoaderComponent(
+                  onPressed: () {
+                    store.login(
+                      onSuccess: () {
+                        context.pushReplacement(todoRoute);
+                      },
+                    );
+                  },
+                  state: store.stateButton,
+                  message: "Enter",
+                );
+              },
+            ),
           ),
           SizedBox(
             height: getToAppBar(context) * 1.5,

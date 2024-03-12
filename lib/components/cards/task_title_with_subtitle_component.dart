@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app_romavic/resources/colors.dart';
 
 class TaskTitleWithSubtitleComponent extends StatelessWidget {
   const TaskTitleWithSubtitleComponent({
@@ -7,14 +6,12 @@ class TaskTitleWithSubtitleComponent extends StatelessWidget {
     required this.title,
     required this.details,
     required this.isDone,
-    this.onChanged,
     this.onTap,
   });
 
   final String title;
   final String details;
   final bool isDone;
-  final ValueChanged<bool?>? onChanged;
   final GestureTapCallback? onTap;
 
   @override
@@ -23,26 +20,16 @@ class TaskTitleWithSubtitleComponent extends StatelessWidget {
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.only(left: 14, right: 14),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  Text(
-                    details,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ],
-              ),
+            Text(
+              title,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
-            Checkbox(
-              value: isDone,
-              onChanged: onChanged,
+            Text(
+              details,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ],
         ),

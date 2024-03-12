@@ -25,18 +25,24 @@ abstract class TodoStoreBase with Store {
   @observable
   ObservableList<TaskEntity> tasksObservable = ObservableList.of([]);
 
+  @observable
+  ObservableList<TaskEntity> copyTasksObservable = ObservableList.of([]);
+
   @action
-  Future<void> changeCurrentMonthAndYearByCalendar(DateTime newData) async {
+  Future<void> changeCurrentMonthAndYearByCalendar(
+    DateTime newData,
+    List<TaskEntity> tasks,
+  ) async {
     currentDate = newData;
-    tasksObservable = ObservableList.of(
-      tasksObservable.filterByDay(currentDate ?? DateTime.now()),
-    );
+    tasksObservable = ObservableList.of(tasks.filterByDay(newData));
   }
 
   @action
   Future<void> addTasks(List<TaskEntity> tasks) async {
     tasksObservable.clear();
+    copyTasksObservable.clear();
     tasksObservable = ObservableList.of(tasks);
+    copyTasksObservable = ObservableList.of(tasks);
   }
 
   String? localeOfCalendar(BuildContext context) {
@@ -51,7 +57,20 @@ abstract class TodoStoreBase with Store {
     return dateFormatted.toUpperCaseFirstLetter();
   }
 
-  int streaksDay(List<TaskEntity>? tasks) {
-    return todoRepository.getStreaksDay(tasks);
+  int streaksDay(
+    List<TaskEntity>? tasks,
+    DateTime currentDate,
+  ) {
+    return todoRepository.getStreaksDay(tasks, currentDate);
+  }
+
+  int streaksDayCompleted(
+    List<TaskEntity>? tasks,
+    DateTime currentDate,
+  ) {
+    return todoRepository.getStreaksDayCompleted(
+      tasks,
+      currentDate,
+    );
   }
 }

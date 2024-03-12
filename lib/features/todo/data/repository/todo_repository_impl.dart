@@ -11,20 +11,28 @@ class TodoRepositoryImpl implements TodoRepository {
   });
 
   @override
-  int getStreaksDay(List<TaskEntity>? tasks) {
+  int getStreaksDay(
+    List<TaskEntity>? tasks,
+    DateTime dateTime,
+  ) {
     if (tasks?.isEmpty == true || tasks == null) {
       return 100;
     } else {
-      return tasks.getStreaksDay();
+      return tasks.getStreaksDay(dateTime) == 0
+          ? 100
+          : tasks.getStreaksDay(dateTime);
     }
   }
 
   @override
-  int getStreaksDayCompleted(List<TaskEntity>? tasks) {
+  int getStreaksDayCompleted(
+    List<TaskEntity>? tasks,
+    DateTime dateTime,
+  ) {
     if (tasks?.isEmpty == true || tasks == null) {
       return 0;
     } else {
-      return tasks.getStreaksDayCompleted();
+      return tasks.getStreaksDayCompleted(dateTime);
     }
   }
 

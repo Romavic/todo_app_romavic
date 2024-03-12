@@ -41,14 +41,31 @@ mixin _$TodoStore on TodoStoreBase, Store {
     });
   }
 
+  late final _$copyTasksObservableAtom =
+      Atom(name: 'TodoStoreBase.copyTasksObservable', context: context);
+
+  @override
+  ObservableList<TaskEntity> get copyTasksObservable {
+    _$copyTasksObservableAtom.reportRead();
+    return super.copyTasksObservable;
+  }
+
+  @override
+  set copyTasksObservable(ObservableList<TaskEntity> value) {
+    _$copyTasksObservableAtom.reportWrite(value, super.copyTasksObservable, () {
+      super.copyTasksObservable = value;
+    });
+  }
+
   late final _$changeCurrentMonthAndYearByCalendarAsyncAction = AsyncAction(
       'TodoStoreBase.changeCurrentMonthAndYearByCalendar',
       context: context);
 
   @override
-  Future<void> changeCurrentMonthAndYearByCalendar(DateTime newData) {
+  Future<void> changeCurrentMonthAndYearByCalendar(
+      DateTime newData, List<TaskEntity> tasks) {
     return _$changeCurrentMonthAndYearByCalendarAsyncAction
-        .run(() => super.changeCurrentMonthAndYearByCalendar(newData));
+        .run(() => super.changeCurrentMonthAndYearByCalendar(newData, tasks));
   }
 
   late final _$addTasksAsyncAction =
@@ -63,7 +80,8 @@ mixin _$TodoStore on TodoStoreBase, Store {
   String toString() {
     return '''
 currentDate: ${currentDate},
-tasksObservable: ${tasksObservable}
+tasksObservable: ${tasksObservable},
+copyTasksObservable: ${copyTasksObservable}
     ''';
   }
 }

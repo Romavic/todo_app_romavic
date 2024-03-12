@@ -1,21 +1,19 @@
 import 'package:todo_app_romavic/features/task_create/domain/entity/task_entity.dart';
 
 extension TaskExtension on Iterable<TaskEntity> {
-  int getStreaksDay() {
-    final currentDate = DateTime.now();
-
+  int getStreaksDay(DateTime currentDate) {
     return where((task) {
       return task.streaks?.any((streak) =>
               streak.dateTime?.year == currentDate.year &&
-              streak.dateTime?.month == currentDate.month &&
-              streak.dateTime?.day == currentDate.day) ??
+                  streak.dateTime?.month == currentDate.month &&
+                  streak.dateTime?.day == currentDate.day &&
+                  streak.isDone == true ||
+              streak.isDone == false) ??
           false;
     }).length;
   }
 
-  int getStreaksDayCompleted() {
-    final currentDate = DateTime.now();
-
+  int getStreaksDayCompleted(DateTime currentDate) {
     return where((task) {
       return task.streaks?.any((streak) =>
               streak.dateTime?.year == currentDate.year &&
@@ -27,9 +25,14 @@ extension TaskExtension on Iterable<TaskEntity> {
   }
 
   List<TaskEntity> filterByDay(DateTime dateTime) {
-    return where((task) =>
-            task.streaks?.any((streak) => streak.dateTime == dateTime) ?? false)
-        .toList();
+    return where(
+      (task) =>
+          task.streaks?.any((streak) =>
+              streak.dateTime?.year == dateTime.year &&
+              streak.dateTime?.month == dateTime.month &&
+              streak.dateTime?.day == dateTime.day) ??
+          false,
+    ).toList();
   }
 
   int filterStreaksInRange(
@@ -40,8 +43,10 @@ extension TaskExtension on Iterable<TaskEntity> {
       return task.streaks?.any((streak) {
             final streakDate = streak.dateTime;
             return streakDate != null &&
-                streakDate.isAfter(initDate) &&
-                streakDate.isBefore(endDate);
+                    streakDate.isAfter(initDate) &&
+                    streakDate.isBefore(endDate) &&
+                    streak.isDone == true ||
+                streak.isDone == false;
           }) ??
           false;
     }).length;
@@ -57,7 +62,7 @@ extension TaskExtension on Iterable<TaskEntity> {
             return streakDate != null &&
                 streakDate.isAfter(initDate) &&
                 streakDate.isBefore(endDate) &&
-                streak.isDone == false;
+                streak.isDone == true;
           }) ??
           false;
     }).length;

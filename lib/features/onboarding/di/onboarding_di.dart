@@ -9,7 +9,6 @@ Future<void> onboardingDI() async {
   getIt.registerFactory<OnboardingDataSource>(
     () => OnboardingDataSourceImpl(
       firebaseFirestoreServices: getIt.get(),
-      authFirebaseServices: getIt.get(),
     ),
   );
 
@@ -17,6 +16,7 @@ Future<void> onboardingDI() async {
     () => OnboardingRepositoryImpl(
       onboardingDataSource: getIt.get(),
       onboardingBox: getIt.get(),
+      uuid: getIt.get(),
     ),
   );
 

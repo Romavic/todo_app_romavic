@@ -74,17 +74,20 @@ class StreakTaskEntityAdapter extends TypeAdapter<StreakTaskEntity> {
     return StreakTaskEntity(
       dateTime: fields[1] as DateTime?,
       isDone: fields[2] as bool?,
+      alarmIdentifier: fields[3] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, StreakTaskEntity obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(1)
       ..write(obj.dateTime)
       ..writeByte(2)
-      ..write(obj.isDone);
+      ..write(obj.isDone)
+      ..writeByte(3)
+      ..write(obj.alarmIdentifier);
   }
 
   @override
